@@ -1,13 +1,27 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const dotenv = require("dotenv").config();
+const mongoose = require("mongoose");
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 
-var app = express();
+const connectDb = async ()=>{
+  try{
+      const connect = await mongoose.connect(process.env.CONNECTION_STRING);
+      console.log("Connected Successfully", connect.connection.host,connect.connection.name);
+  }catch(err){
+      console.log(err);
+      process.exit(1);
+  }
+}
+connectDb();
+
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
